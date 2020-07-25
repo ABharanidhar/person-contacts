@@ -1,0 +1,102 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+	<title>Contact Directory</title>
+	<style>
+	table {
+    width:100%;
+}
+
+td {
+    width:33%; // 3 evenly sized columns
+}</style>
+</head>
+
+<body>
+
+<div class="container">
+
+	<h3>Contact Directory</h3>
+	<hr>
+	
+	<form class="form-inline my-2 my-lg-0" method="get" th:action="@{'/contact/searchContact'}">
+      <input  required="required" class="form-control mr-sm-2" name="data" type="search" placeholder="Search" aria-label="Search">
+      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+    </form>
+    <br><br>
+	<a th:href="@{/contact/displayAddForm}" class="btn btn-primary mb-3"> ADD CONTACT</a>
+	<div id="accordion">
+	<div class="card" th:each="contactData : ${contacts}">
+      <div class="card-header">
+        <table>
+        <tbody>
+        <tr>
+        <td ><a class="card-link" data-toggle="collapse" th:href="'#collapse'+${contactData.contact.id}">
+         		<span th:text="${contactData.contact.firstName}" ></span>	
+				<span th:text="${contactData.contact.middleName}" ></span>	
+				<span th:text="${contactData.contact.lastName}" ></span>
+        </a></td>
+        <td><form action="#" th:action="@{'/contact/displayEditForm/{id}'(id=${contactData.contact.id})}" >
+		  <button class="button btn-info " type="submit" id="submitButton"> Edit </button>
+		</form></td>
+		
+        <td><form action="#" th:action="@{'/contact/deleteContact/{id}'(id=${contactData.contact.id})}" th:method="delete" >
+		  <button class="button btn-danger" type="submit" id="submitButton"> Delete </button>
+		</form></td>
+		</tr>
+		</tbody>
+		</table>
+      </div>
+      
+      <div th:id="'collapse'+${contactData.contact.id}" class="collapse" data-parent="#accordion">
+        <div class="card-body">
+          	
+          	<div th:if="${not #lists.isEmpty(contactData.addresses)}"><br>Address(s):</div>
+			<div th:each="address : ${contactData.addresses}">
+				<span th:text="${address.type}"></span>
+				<span th:text="${address.streetAddress}"></span>
+				<span th:text="${address.city}"></span>
+				<span th:text="${address.state}"></span>
+				<span th:text="${address.zip}"></span>	
+			</div>	
+			<div th:if="${not #lists.isEmpty(contactData.phones)}"><br>Phone(s):</div>
+			<div th:each="phone : ${contactData.phones}">
+				<span th:text="${phone.type}"></span>
+				<span th:text="|${phone.areaCode}${phone.number}"|></span>
+			</div>	
+			<div th:if="${not #lists.isEmpty(contactData.dates)}"><br>Date(s):</div>
+			<div th:each="date : ${contactData.dates}">
+				<span th:text="${date.type}"></span>
+				<span th:text="${date.dateEntry}"></span>
+			</div>	
+				
+        </div>
+      </div>
+    </div>
+    
+  </div>
+</div>
+</body>
+
+<script>
+function editContact(){
+	alert(this.id)
+}
+</script>
+
+
+
+</html>
+
+
+

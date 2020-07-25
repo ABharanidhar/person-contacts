@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css">
+
+	<title>Employee Directory</title>
+</head>
+<body>
+	<div class="container">
+	<h3>New Contact Directory</h3>
+	<hr>
+	<form action="#" th:action="@{/contact/addContact}" th:object="${contactData}" method="POST">
+		<table>
+		<tr><td>First Name: </td><td><input autofocus pattern="[A-Za-z ]+"  type="text" th:field="*{contact.firstName}"  required="required"/></td> </tr>
+		<tr><td>Middle Name: </td><td><input type="text" pattern="[A-Za-z ]+" th:field="*{contact.middleName}" /></td></tr>
+		<tr><td>Last Name:</td><td> <input type="text" pattern="[A-Za-z ]+" th:field="*{contact.lastName}" required="required"/></td></tr>
+		</table>
+		<hr>Address Details 		
+		<input class="btn btn-outline-primary btn-sm" type="button" value="Add Address" onClick="addInput('address');">
+		<div id="address">
+			
+	     </div>
+	     
+		<hr>Phone Details 		
+		<input class="btn btn-outline-primary btn-sm" type="button" value="Add Phone" onClick="addInput('phone');">
+		<div id="phone"> 
+			
+	     </div>
+	     
+	     <hr>Date Details 		
+		<input class="btn btn-outline-primary btn-sm" type="button" value="Add Date" onClick="addInput('date');">
+		<div id="date">
+		</div>
+	     
+		
+		<br><button class="btn btn-primary" type="submit">save</button>
+		<a class="btn btn-secondary" href="/contact/list">cancel</a>
+	</form>
+	</div>
+</body>
+
+<script>
+	var counterPhone = 0;
+	var counterAddress = 0;
+	var counterDate = 0;
+	function addInput(divName){
+		if(divName=='phone'){
+	          var newdiv = document.createElement('div');
+	          newdiv.setAttribute('id', "divPhone"+ (counterPhone+1));
+	          newdiv.innerHTML = 
+	        	" <br>Type: <input type='text' required pattern='[A-Za-z ]+' name='phones["+counterPhone+"].type' />"+
+	        	" Area code: <input type='text' required pattern='[0-9]{3}' name='phones["+counterPhone+"].areaCode' />"+
+	        	" Number: <input type='text' required pattern='[0-9]{7}' name='phones["+counterPhone+"].number' />"+
+	        	" <a href='#' onclick='removeElement(\"divPhone"+ (counterPhone+1) +"\");' return false;> X </a> <br>";
+	          document.getElementById(divName).appendChild(newdiv);
+	          counterPhone++;
+		}else if(divName=='address'){
+			var newdiv = document.createElement('div');
+			newdiv.setAttribute('id', "divAddress"+ (counterAddress+1));
+	          newdiv.innerHTML = 
+	        	" <br>Type: <input type='text' required pattern='[A-Za-z ]+' name='addresses["+counterAddress+"].type' />"+
+	        	" street Address: <input required type='text' name='addresses["+counterAddress+"].streetAddress' /><br><br>"+
+	        	" city: <input type='text' required pattern='[A-Za-z ]+' name='addresses["+counterAddress+"].city' />"+
+	        	"state: <input type='text' required pattern='[A-Za-z ]+' name='addresses["+counterAddress+"].state' />"+
+	        	"zip code: <input type='text' required pattern='[0-9]{5}' name='addresses["+counterAddress+"].zip' />"+
+	        	"<a href='#' onclick='removeElement(\"divAddress"+ (counterAddress+1) +"\");' return false;> X </a> <br>";
+	          document.getElementById(divName).appendChild(newdiv);
+	          counterAddress++;
+		}else if(divName=='date'){
+	          var newdiv = document.createElement('divDate'+(counterDate+1));
+			  newdiv.setAttribute('id', "divDate"+ (counterDate+1));
+	          newdiv.innerHTML = 
+	        	" <br>Type: <input required pattern='[A-Za-z ]+' type='text' name='dates["+counterDate+"].type' />"+
+	        	" Date: <input required type='date' name='dates["+counterDate+"].dateEntry' />"+
+	        	"<a href='#' onclick='removeElement(\"divDate"+ (counterDate+1) +"\");' return false;> X </a> <br>";
+	          document.getElementById(divName).appendChild(newdiv);
+	          counterDate++;
+		}
+	}
+	function removeElement(elementId) {
+	    document.getElementById(elementId).outerHTML = "";
+	}
+</script>
+</html>

@@ -1,0 +1,76 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+	<title>Search Contact</title>
+	
+	<style>
+	table {
+    width:100%;
+}
+
+td {
+    width:33%; // 3 evenly sized columns
+}</style>
+</head>
+
+<body>
+
+<div class="container">
+
+	<h3>Search Contact Directory</h3>
+	<hr>
+	
+	<a th:href="@{/contact/list}"> back to main list</a>
+    <br><br>
+	
+	<div id="accordion">
+	<div th:if="${ #lists.isEmpty(contacts)}"><br>No contacts found!</div>
+	<div class="card" th:each="contactData : ${contacts}">
+      <div class="card-header">
+        <table>
+        <tbody>
+        <tr>
+        <td ><a class="card-link">
+         		<span th:text="${contactData.contact.firstName}" ></span>	
+				<span th:text="${contactData.contact.middleName}" ></span>	
+				<span th:text="${contactData.contact.lastName}" ></span>
+        </a></td>
+        <td><form action="#" th:action="@{'/contact/displayEditForm/{id}'(id=${contactData.contact.id})}" >
+		  <button class="button btn-info " type="submit" id="submitButton"> Edit </button>
+		</form></td>
+		
+        <td><form action="#" th:action="@{'/contact/deleteContact/{id}'(id=${contactData.contact.id})}" th:method="delete" >
+		  <button class="button btn-danger" type="submit" id="submitButton"> Delete </button>
+		</form></td>
+		</tr>
+		</tbody>
+		</table>
+      </div>
+    </div>
+    
+  </div>
+</div>
+</body>
+
+<script>
+function editContact(){
+	alert(this.id)
+}
+</script>
+
+
+
+</html>
+
+
+

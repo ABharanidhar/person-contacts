@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" >
+
+	<title>Employee Directory</title>
+</head>
+<body>
+	<div class="container">
+	<h3>Edit Contact Directory</h3>
+	<hr>
+	<form action="#" th:action="@{/contact/editContact}" th:object="${contactData}" method="POST">
+		<table>
+		<tr><td>First Name: </td><td><input autofocus required pattern='[A-Za-z ]+' type="text" th:field="*{contact.firstName}"  /></td> </tr>
+		<tr><td>Middle Name: </td><td><input pattern='[A-Za-z ]+' type="text" th:field="*{contact.middleName}" /></td></tr>
+		<tr><td>Last Name:</td><td> <input required pattern='[A-Za-z ]+' type="text" th:field="*{contact.lastName}" /></td></tr>
+		</table>
+		<input type="hidden" th:field="*{contact.id}"/>
+
+		<hr>Address Details
+		<input type="button" value="Add Address" onClick="addInput('address');">
+		<div id="address">
+			<div th:each="address, rowStat : ${contactData.addresses}" th:id="|divAddress${address.id}|"> 
+				<br>Type: <input required pattern='[A-Za-z ]+' type="text" th:field="*{addresses[__${rowStat.index}__].type}" /> 
+				Street Address: <input required type="text" th:field="*{addresses[__${rowStat.index}__].streetAddress}"  /><br><br>
+				City: <input type="text" required pattern='[A-Za-z]+' th:field="*{addresses[__${rowStat.index}__].city}" />
+				State: <input type="text" required pattern='[A-Za-z]+' th:field="*{addresses[__${rowStat.index}__].state}" />
+				Zip Code: <input type="text" required pattern='[0-9]{5}' th:field="*{addresses[__${rowStat.index}__].zip}" />
+				<input type="hidden" th:field="*{addresses[__${rowStat.index}__].id}"/> 
+				<a href='#' th:onclick="|removeElement('divAddress${address.id}'); return false;|"> X </a>
+				<br><br>
+		     </div>
+	     </div>
+	     
+		<hr>Phone Details 		
+		<input type="button" value="Add Phone" onClick="addInput('phone');">
+		<div id="phone" >
+			<div th:each="phone, rowStat : ${contactData.phones}" th:id="|divPhone${phone.id}|"> 
+				<br>Type: <input required pattern='[A-Za-z ]+' type="text" th:field="*{phones[__${rowStat.index}__].type}" /> 
+				Area code: <input required pattern='[0-9]{3}' type="text" th:field="*{phones[__${rowStat.index}__].areaCode}" />
+				Number: <input required pattern='[0-9]{7}' type="text" th:field="*{phones[__${rowStat.index}__].number}" />
+				<input type="hidden" th:field="*{phones[__${rowStat.index}__].id}"/> 
+				<a href='#' th:onclick="|removeElement('divPhone${phone.id}'); return false;|"> X </a>
+				<br><br>
+	     	</div>
+	     </div>
+	     
+	     <hr>Date Details 		
+		<input type="button" value="Add Date" onClick="addInput('date');">	     
+	     <div id="date">
+			<div th:each="date, rowStat : ${contactData.dates}" th:id="|divDate${date.id}|"> 
+			<br>Type: <input type="text" required pattern='[A-Za-z ]+' th:field="*{dates[__${rowStat.index}__].type}" /> 
+			Date: <input type="text" required th:field="*{dates[__${rowStat.index}__].dateEntry}" />
+			<input type="hidden" th:field="*{dates[__${rowStat.index}__].id}"/>
+			<a href='#' th:onclick="|removeElement('divDate${date.id}'); return false;|"> X </a>	
+			 <br><br>
+	     </div>
+	     </div>
+		<br><button class="btn btn-primary" type="submit">save</button>
+		<a class="btn btn-secondary" href="/contact/list">cancel</a>
+		
+	</form>
+	</div>
+	
+</body>
+
+<script>
+	var counterPhone = 10;
+	var counterAddress = 10;
+	var counterDate = 10;
+	function addInput(divName){
+		if(divName=='phone'){
+	          var newdiv = document.createElement('div');
+	          newdiv.setAttribute('id', "divPhone"+ (counterPhone+1));
+	          newdiv.innerHTML = 
+	        	" <br>Type: <input type='text' required pattern='[A-Za-z]+' name='phones["+counterPhone+"].type' />"+
+	        	" Area code: <input type='text' required pattern='[0-9]{3}' name='phones["+counterPhone+"].areaCode' />"+
+	        	" Number: <input type='text' required pattern='[0-9]{7}' name='phones["+counterPhone+"].number' />"+
+	        	" <a href='#' onclick='removeElement(\"divPhone"+ (counterPhone+1) +"\");' return false;> X </a> <br>";
+	          document.getElementById(divName).appendChild(newdiv);
+	          counterPhone++;
+		}else if(divName=='address'){
+			var newdiv = document.createElement('div');
+			newdiv.setAttribute('id', "divAddress"+ (counterAddress+1));
+	          newdiv.innerHTML = 
+	        	" <br>Type: <input type='text' required pattern='[A-Za-z ]+' name='addresses["+counterAddress+"].type' />"+
+	        	" street Address: <input required type='text' name='addresses["+counterAddress+"].streetAddress' /><br><br>"+
+	        	" city: <input type='text' required pattern='[A-Za-z ]+' name='addresses["+counterAddress+"].city' />"+
+	        	"state: <input type='text' required pattern='[A-Za-z ]+' name='addresses["+counterAddress+"].state' />"+
+	        	"zip code: <input type='text' required pattern='[0-9]{5}' name='addresses["+counterAddress+"].zip' />"+
+	        	"<a href='#' onclick='removeElement(\"divAddress"+ (counterAddress+1) +"\");' return false;> X </a> <br>";
+	          document.getElementById(divName).appendChild(newdiv);
+	          counterAddress++;
+		}else if(divName=='date'){
+	          var newdiv = document.createElement('divDate'+(counterDate+1));
+			  newdiv.setAttribute('id', "divDate"+ (counterDate+1));
+	          newdiv.innerHTML = 
+	        	" <br>Type: <input required pattern='[A-Za-z ]+' type='text' name='dates["+counterDate+"].type' />"+
+	        	" Date: <input required type='date' name='dates["+counterDate+"].dateEntry' />"+
+	        	"<a href='#' onclick='removeElement(\"divDate"+ (counterDate+1) +"\");' return false;> X </a> <br>";
+	          document.getElementById(divName).appendChild(newdiv);
+	          counterDate++;
+		}
+	}
+	function removeElement(elementId) {
+	    document.getElementById(elementId).outerHTML = "";
+	}
+</script>
+</html>
